@@ -26,18 +26,35 @@ spec:
       containers:
         - name: unbound
           image: mvance/unbound-rpi:1.13.1
+          startupProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - drill @127.0.0.1 -p 5353 cloudflare.com || exit 1
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 60
+            successThreshold: 1
+            failureThreshold: 5
           livenessProbe:
             exec:
               command:
-              - drill @127.0.0.1 cloudflare.com || exit 1
+              - /bin/sh
+              - -c
+              - drill @127.0.0.1 -p 5353 cloudflare.com || exit 1
             initialDelaySeconds: 5
-            periodSeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 10
           readinessProbe:
             exec:
               command:
-              - drill @127.0.0.1 cloudflare.com || exit 1
-            initialDelaySeconds: 5
-            periodSeconds: 5
+              - /bin/sh
+              - -c
+              - drill @127.0.0.1 -p 5353 cloudflare.com || exit 1
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 10
           volumeMounts:
             - name: unbound-conf
               mountPath: /opt/unbound/etc/unbound/unbound.conf
@@ -62,18 +79,35 @@ spec:
               value: OTYXON6d
             - name: WEBTHEME
               value: default-darker
+          startupProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 60
+            successThreshold: 1
+            failureThreshold: 5
           livenessProbe:
             exec:
               command:
+              - /bin/sh
+              - -c
               - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
             initialDelaySeconds: 5
-            periodSeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 10
           readinessProbe:
             exec:
               command:
+              - /bin/sh
+              - -c
               - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 10
           ports:
             - containerPort: 53
             - containerPort: 80
