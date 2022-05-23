@@ -1,6 +1,7 @@
-apiVersion: autoscaling/v2
+apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
+  creationTimestamp: null
   name: pihole
   namespace: pihole
 spec:

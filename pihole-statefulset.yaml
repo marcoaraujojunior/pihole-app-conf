@@ -25,6 +25,18 @@ spec:
       containers:
         - name: unbound
           image: mvance/unbound-rpi:1.13.1
+          livenessProbe:
+            exec:
+            command:
+            - drill @127.0.0.1 cloudflare.com || exit 1
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+            command:
+            - drill @127.0.0.1 cloudflare.com || exit 1
+            initialDelaySeconds: 5
+            periodSeconds: 5
           volumeMounts:
             - name: unbound-conf
               mountPath: /opt/unbound/etc/unbound/unbound.conf
@@ -37,7 +49,7 @@ spec:
               memory: "64Mi"
               cpu: 200m
         - name: pihole
-          image: pihole/pihole:latest
+          image: pihole/pihole:2022.04.3
           env:
             - name: PIHOLE_DNS_
               value: 127.0.0.1#5353
@@ -49,6 +61,18 @@ spec:
               value: OTYXON6d
             - name: WEBTHEME
               value: default-darker
+          livenessProbe:
+            exec:
+            command:
+            - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+            command:
+            - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
+            initialDelaySeconds: 5
+            periodSeconds: 5
           ports:
             - containerPort: 53
             - containerPort: 80
