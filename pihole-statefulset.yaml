@@ -27,14 +27,14 @@ spec:
           image: mvance/unbound-rpi:1.13.1
           livenessProbe:
             exec:
-            command:
-            - drill @127.0.0.1 cloudflare.com || exit 1
+              command:
+              - drill @127.0.0.1 cloudflare.com || exit 1
             initialDelaySeconds: 5
             periodSeconds: 5
           readinessProbe:
             exec:
-            command:
-            - drill @127.0.0.1 cloudflare.com || exit 1
+              command:
+              - drill @127.0.0.1 cloudflare.com || exit 1
             initialDelaySeconds: 5
             periodSeconds: 5
           volumeMounts:
@@ -63,14 +63,14 @@ spec:
               value: default-darker
           livenessProbe:
             exec:
-            command:
-            - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
+              command:
+              - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
             initialDelaySeconds: 5
             periodSeconds: 5
           readinessProbe:
             exec:
-            command:
-            - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
+              command:
+              - dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1
             initialDelaySeconds: 5
             periodSeconds: 5
           ports:
