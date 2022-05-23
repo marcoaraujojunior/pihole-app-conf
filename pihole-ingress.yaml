@@ -6,6 +6,8 @@ metadata:
   namespace: pihole
   annotations:
     kubernetes.io/ingress.class: traefik
+  labels:
+    app.kubernetes.io/instance: pihole
 spec:
   rules:
   - host: dns.de.araujo.local

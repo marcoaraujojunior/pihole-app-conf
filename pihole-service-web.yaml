@@ -4,6 +4,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
+    app.kubernetes.io/instance: pihole
     service-web: pihole-web
   name: pihole-web
   namespace: pihole

@@ -4,6 +4,8 @@ metadata:
   creationTimestamp: null
   name: pihole
   namespace: pihole
+  labels:
+    app.kubernetes.io/instance: pihole
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

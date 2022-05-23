@@ -4,3 +4,5 @@ kind: Namespace
 metadata:
   name: pihole
   namespace: pihole
+  labels:
+    app.kubernetes.io/instance: pihole

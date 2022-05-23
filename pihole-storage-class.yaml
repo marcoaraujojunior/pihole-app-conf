@@ -6,6 +6,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: pihole-nfs-client
+    app.kubernetes.io/instance: pihole
   name: pihole-nfs-client
 parameters:
   archiveOnDelete: "true"
