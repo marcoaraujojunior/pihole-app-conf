@@ -1,0 +1,20 @@
+########################################################
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: custom-dns
+  namespace: pihole
+data:
+  69-custom-dns.conf: |-
+    host-record=dns.de.araujo.local,192.168.0.5
+    host-record=dns.de.araujo.local,192.168.0.6
+    host-record=passvault.de.araujo.local,192.168.0.5
+    host-record=passvault.de.araujo.local,192.168.0.6
+    host-record=grafana.de.araujo.local,192.168.0.5
+    host-record=grafana.de.araujo.local,192.168.0.6
+    host-record=prometheus.de.araujo.local,192.168.0.5
+    host-record=prometheus.de.araujo.local,192.168.0.6
+    host-record=de.araujo.local,192.168.0.5
+    host-record=de.araujo.local,192.168.0.6
+    host-record=k8s.de.araujo.local,192.168.0.5
+    host-record=k8s.de.araujo.local,192.168.0.6

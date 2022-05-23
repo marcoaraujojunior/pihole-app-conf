@@ -1,0 +1,19 @@
+########################################################
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    service-web: pihole-web
+  name: pihole-web
+  namespace: pihole
+spec:
+  ports:
+    - name: "web"
+      port: 80
+      targetPort: 80
+  selector:
+    service-web: pihole-web
+status:
+  loadBalancer: {}
+

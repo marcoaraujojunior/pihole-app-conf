@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pihole
+  namespace: pihole
+  labels:
+    app: pihole
+spec:
+  serviceName: pihole
+  selector:
+    matchLabels:
+      service-web: pihole-web
+      service-dns: pihole-dns
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      namespace: pihole
+      labels:
+        service-web: pihole-web
+        service-dns: pihole-dns
+    spec:
+      containers:
+        - name: unbound
+          image: mvance/unbound-rpi:1.13.1
+          volumeMounts:
+            - name: unbound-conf
+              mountPath: /opt/unbound/etc/unbound/unbound.conf
+              subPath: unbound.conf
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: 500m
+            requests:
+              memory: "64Mi"
+              cpu: 200m
+        - name: pihole
+          image: pihole/pihole:latest
+          env:
+            - name: PIHOLE_DNS_
+              value: 127.0.0.1#5353
+            - name: TZ
+              value: America/Halifax
+            - name: VIRTUAL_HOST
+              value: dns.de.araujo.local
+            - name: WEBPASSWORD
+              value: OTYXON6d
+            - name: WEBTHEME
+              value: default-darker
+          ports:
+            - containerPort: 53
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: 500m
+            requests:
+              memory: "64Mi"
+              cpu: 200m
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - mountPath: /etc/pihole
+              name: etc-pihole-vct
+            - mountPath: /etc/dnsmasq.d
+              name: etc-dnsmasqd-vct
+            - name: custom-dns
+              mountPath: /etc/dnsmasq.d/69-custom-dns.conf
+              subPath: 69-custom-dns.conf
+
+      restartPolicy: Always
+      volumes:
+        - name: unbound-conf
+          configMap:
+            name: unbound-conf
+        - name: custom-dns
+          configMap:
+            name: custom-dns
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - web
+                topologyKey: kubernetes.io/hostname
+  volumeClaimTemplates:
+  - metadata:
+      name: etc-pihole-vct
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: pihole-nfs-client
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: etc-dnsmasqd-vct
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: pihole-nfs-client
+      resources:
+        requests:
+          storage: 1Gi
+

@@ -1,0 +1,21 @@
+########################################################
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    service-dns: pihole-dns
+  name: pihole-dns
+  namespace: pihole
+spec:
+  ports:
+    - name: "53-udp"
+      port: 53
+      protocol: UDP
+      targetPort: 53
+  selector:
+    service-dns: pihole-dns
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+
