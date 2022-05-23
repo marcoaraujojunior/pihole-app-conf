@@ -20,3 +20,5 @@ data:
     host-record=de.araujo.local,192.168.0.6
     host-record=k8s.de.araujo.local,192.168.0.5
     host-record=k8s.de.araujo.local,192.168.0.6
+    host-record=argocd.de.araujo.local,192.168.0.5
+    host-record=argocd.de.araujo.local,192.168.0.6
